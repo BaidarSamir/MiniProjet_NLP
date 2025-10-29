@@ -1,164 +1,333 @@
-# 🏥 AI Disease Predictor
+# Disease Prediction System# Disease Prediction System
 
-Hey! This is a smart disease prediction system that listens to your symptoms and predicts what you might have. You can either speak your symptoms out loud (it even understands Arabic!) or just type them in. It uses deep learning and NLP to figure out what's going on.
 
-> **� Want to jump right in?** Check out [QUICK_START.md](QUICK_START.md) for the simplest guide!
 
-## 🤔 What Does This Thing Do?
+A machine learning project that predicts diseases based on symptoms using a neural network trained on medical data. Supports both voice and text input with Arabic language support.A machine learning project that predicts diseases based on symptoms. The system can accept voice input (with Arabic support) or text input, using a neural network trained on medical data.
 
-Imagine you're not feeling well. Instead of googling your symptoms and convincing yourself you have 10 different diseases, you can use this tool to get a smart prediction based on actual medical data!
 
-**Here's what happens:**
 
-1. 🎤 **Tell it how you feel** - Speak in English or Arabic, or just type your symptoms
-2. 🧠 **AI understands you** - It figures out what symptoms you're describing (even if you say "my head hurts" instead of "headache")  
-3. 🔬 **Gets predictions** - A neural network trained on thousands of cases gives you the top possible diseases
-4. 📊 **Shows confidence** - You get percentages so you know how sure the AI is
+> For quick start instructions, see [QUICK_START.md](QUICK_START.md)> For quick start instructions, see [QUICK_START.md](QUICK_START.md)AI Disease Predictor
 
-**Two main parts:**
 
-- **Speech-to-Text** (`speech_to_text.ipynb`): Record your voice, it transcribes and translates if needed
-- **Disease Predictor** (`Disease_predictor_net.ipynb`): The actual AI that predicts diseases from symptoms
 
-### Cool Features
+## OverviewHey! This is a smart disease prediction system that listens to your symptoms and predicts what you might have. You can either speak your symptoms out loud (it even understands Arabic!) or just type them in. It uses deep learning and NLP to figure out what's going on.
 
-- � Works with voice input
-- 🌍 Understands Arabic and translates automatically  
-- 🧠 Trained on 132 symptoms and 41 diseases (almost 5,000 cases!)
-- 🔍 Smart enough to understand "stomach ache" and "abdominal pain" mean the same thing
-- 📊 Gives you top 5 predictions with confidence scores
-- 📈 Shows you cool visualizations of the data
 
-## 🏗️ How It Works (The Nerdy Stuff)
 
-### Voice Pipeline (Optional - if you want voice input)
+This project combines speech recognition, natural language processing, and neural networks to predict diseases from symptom descriptions.> **� Want to jump right in?** Check out [QUICK_START.md](QUICK_START.md) for the simplest guide!
 
-```
+
+
+**Main Components:**## 🤔 What Does This Thing Do?
+
+- Speech-to-Text Pipeline - Records and transcribes audio with Arabic translation
+
+- Disease Prediction Model - Neural network trained on 4,961 medical casesImagine you're not feeling well. Instead of googling your symptoms and convincing yourself you have 10 different diseases, you can use this tool to get a smart prediction based on actual medical data!
+
+
+
+**Capabilities:****Here's what happens:**
+
+- Voice and text input
+
+- Arabic language support with automatic translation1. 🎤 **Tell it how you feel** - Speak in English or Arabic, or just type your symptoms
+
+- 132 symptoms across 41 diseases2. 🧠 **AI understands you** - It figures out what symptoms you're describing (even if you say "my head hurts" instead of "headache")  
+
+- Natural language understanding3. 🔬 **Gets predictions** - A neural network trained on thousands of cases gives you the top possible diseases
+
+- Top 5 predictions with confidence scores4. 📊 **Shows confidence** - You get percentages so you know how sure the AI is
+
+
+
+## Project Structure**Two main parts:**
+
+
+
+```- **Speech-to-Text** (`speech_to_text.ipynb`): Record your voice, it transcribes and translates if needed
+
+MiniProjet_NLP/- **Disease Predictor** (`Disease_predictor_net.ipynb`): The actual AI that predicts diseases from symptoms
+
+├── Disease_predictor_net.ipynb     # Main prediction model
+
+├── speech_to_text.ipynb            # Voice input processing### Cool Features
+
+├── symbipredict_2022.csv           # Training dataset
+
+├── test_disease_predictor.py       # Interactive test script- � Works with voice input
+
+├── test_simple.py                  # Simple test script- 🌍 Understands Arabic and translates automatically  
+
+├── setup.bat                       # Windows installer- 🧠 Trained on 132 symptoms and 41 diseases (almost 5,000 cases!)
+
+├── QUICK_START.md                  # Quick start guide- 🔍 Smart enough to understand "stomach ache" and "abdominal pain" mean the same thing
+
+└── HOW_TO_RUN.md                   # Detailed instructions- 📊 Gives you top 5 predictions with confidence scores
+
+```- 📈 Shows you cool visualizations of the data
+
+
+
+## Installation## 🏗️ How It Works (The Nerdy Stuff)
+
+
+
+### Requirements### Voice Pipeline (Optional - if you want voice input)
+
+- Python 3.8+
+
+- Jupyter Notebook```
+
 You speak → Records audio → Transcribes it → Translates to English → Extracts symptoms → Predicts disease
-```
 
-We use:
-- **ElevenLabs** for transcription (it's really good with dialects!)
-- **GPT-3.5** to translate and extract clean symptom lists from your rambling 😄
+### Basic Setup```
 
-### The AI Brain
 
-It's a neural network that looks like this:
 
-```
+```bashWe use:
+
+# Install dependencies- **ElevenLabs** for transcription (it's really good with dialects!)
+
+pip install pandas numpy tensorflow keras scikit-learn matplotlib seaborn sentence-transformers- **GPT-3.5** to translate and extract clean symptom lists from your rambling 😄
+
+
+
+# For voice input (optional)### The AI Brain
+
+pip install sounddevice scipy elevenlabs python-dotenv openai
+
+```It's a neural network that looks like this:
+
+
+
+Windows users can double-click `setup.bat` to install automatically.```
+
 Your symptoms (as numbers)
-    ↓
+
+## Usage    ↓
+
 512 neurons (lots of thinking!)
-    ↓
+
+### Method 1: Jupyter Notebook    ↓
+
 256 neurons (getting focused)
-    ↓
-128 neurons (almost there...)
-    ↓
-41 possible diseases (the answer!)
+
+1. Open the notebook:    ↓
+
+   ```bash128 neurons (almost there...)
+
+   jupyter notebook Disease_predictor_net.ipynb    ↓
+
+   ```41 possible diseases (the answer!)
+
 ```
+
+2. Run all cells (takes ~10 minutes first time)
 
 **The secret sauce:**
-- Trained on almost 5,000 patient cases
-- Uses dropout and batch normalization (fancy terms that make it smarter)
-- Gets about 85-90% accuracy on validation data
-- Uses something called "sentence transformers" to understand that "belly pain" = "stomach ache"
 
-## 📁 What's in Here?
+3. Modify the test cell with your symptoms:- Trained on almost 5,000 patient cases
 
-```
+   ```python- Uses dropout and batch normalization (fancy terms that make it smarter)
+
+   my_symptoms = ['fever', 'headache', 'cough']- Gets about 85-90% accuracy on validation data
+
+   ```- Uses something called "sentence transformers" to understand that "belly pain" = "stomach ache"
+
+
+
+4. Run to get predictions## 📁 What's in Here?
+
+
+
+### Method 2: Python Script```
+
 MiniProjet_NLP/
-│
-├── Disease_predictor_net.ipynb     # The main AI model (start here!)
-├── speech_to_text.ipynb            # Voice recording stuff (optional)
+
+```bash│
+
+python test_disease_predictor.py├── Disease_predictor_net.ipynb     # The main AI model (start here!)
+
+```├── speech_to_text.ipynb            # Voice recording stuff (optional)
+
 ├── symbipredict_2022.csv           # The training data (4,961 cases)
-├── test_disease_predictor.py       # Quick Python script to test
+
+The script includes an interactive mode where you can enter your own symptoms.├── test_disease_predictor.py       # Quick Python script to test
+
 ├── test_simple.py                  # Even simpler test script
-├── setup.bat                       # Windows installer (double-click to setup)
+
+### Method 3: Voice Input├── setup.bat                       # Windows installer (double-click to setup)
+
 ├── QUICK_START.md                  # Easiest way to get started
-├── HOW_TO_RUN.md                   # Detailed instructions
-└── README.md                       # You're reading it! 👋
-```
+
+1. Set up API keys in `.env`:├── HOW_TO_RUN.md                   # Detailed instructions
+
+   ```└── README.md                       # You're reading it! 👋
+
+   ELEVENLABS_API_KEY=your_key_here```
+
+   ```
 
 ## ⚡ How to Use It
 
+2. Open `speech_to_text.ipynb` and run cells to record, transcribe, and predict.
+
 ### The Super Easy Way (Windows)
 
+## Examples
+
 ```bash
-# Step 1: Install everything you need
-setup.bat
 
-# Step 2: Open the notebook
-jupyter notebook Disease_predictor_net.ipynb
+```python# Step 1: Install everything you need
 
-# Step 3: Click "Run All" and wait about 10 minutes
+# Try these symptom combinationssetup.bat
 
-# Step 4: At the end, change the symptoms and run that cell again!
-```
+['back pain', 'stiffness', 'weakness']
+
+['stomach pain', 'vomiting', 'diarrhea']# Step 2: Open the notebook
+
+['cough', 'fever', 'difficulty breathing']jupyter notebook Disease_predictor_net.ipynb
+
+['headache', 'dizziness', 'nausea']
+
+```# Step 3: Click "Run All" and wait about 10 minutes
+
+
+
+The system understands natural language:# Step 4: At the end, change the symptoms and run that cell again!
+
+- "my head hurts" becomes "headache"```
+
+- "stomach ache" becomes "abdominal pain"
 
 That's literally it! 🎉
 
+## Technical Details
+
 ### The "I Want to Type Symptoms" Way
 
-1. **First time setup:**
-   ```bash
-   pip install pandas numpy tensorflow keras scikit-learn matplotlib seaborn sentence-transformers
-   ```
+**Neural Network:**
+
+- Architecture: 512 → 256 → 128 → 41 neurons1. **First time setup:**
+
+- Dropout and batch normalization   ```bash
+
+- Adam optimizer (lr: 0.0001)   pip install pandas numpy tensorflow keras scikit-learn matplotlib seaborn sentence-transformers
+
+- 70/30 train-validation split   ```
+
+- Accuracy: 85-90%
 
 2. **Run the notebook:**
-   ```bash
-   jupyter notebook Disease_predictor_net.ipynb
-   ```
+
+**NLP:**   ```bash
+
+- Sentence transformers (all-MiniLM-L6-v2)   jupyter notebook Disease_predictor_net.ipynb
+
+- Cosine similarity matching   ```
+
+- 0.5 threshold for symptom recognition
 
 3. **Run all cells from top to bottom** (Kernel → Restart & Run All)
 
-4. **At the bottom, you'll see something like this:**
-   ```python
-   # Change these to your symptoms!
+**Dataset:**
+
+- 4,961 patient cases4. **At the bottom, you'll see something like this:**
+
+- 132 binary symptom features   ```python
+
+- 41 disease classifications   # Change these to your symptoms!
+
    my_symptoms = ['fever', 'headache', 'cough', 'fatigue']
-   ```
 
-5. **Change the symptoms to whatever you want** and run that cell again
+## Troubleshooting   ```
 
-**Try these examples:**
-- `['back pain', 'stiffness', 'weakness']`
+
+
+**Module not found:**5. **Change the symptoms to whatever you want** and run that cell again
+
+```bash
+
+pip install <missing_package>**Try these examples:**
+
+```- `['back pain', 'stiffness', 'weakness']`
+
 - `['stomach pain', 'vomiting', 'diarrhea']`
-- `['cough', 'fever', 'difficulty breathing']`
-- `['headache', 'dizziness', 'nausea']`
-     - Train the neural network
-     - Create prediction functions
 
-3. **Test with Sample Symptoms**
+**Audio recording fails:**- `['cough', 'fever', 'difficulty breathing']`
+
+```bash- `['headache', 'dizziness', 'nausea']`
+
+pip install sounddevice scipy     - Train the neural network
+
+```     - Create prediction functions
+
+
+
+**Training takes long:** Normal, ~10 minutes on CPU3. **Test with Sample Symptoms**
+
    - Scroll to the bottom of the notebook
-   - Find or create a cell with:
+
+**Low confidence:** Use 3-5 specific symptoms for best results   - Find or create a cell with:
+
      ```python
-     # Test with your own symptoms
+
+## Important Disclaimer     # Test with your own symptoms
+
      my_symptoms = ['back pain', 'fatigue', 'headache']
-     validated_symptoms, _ = map_symptoms(my_symptoms, threshold=0.5)
+
+**This is an educational project. Not for medical diagnosis.**     validated_symptoms, _ = map_symptoms(my_symptoms, threshold=0.5)
+
      result = predict_disease_from_symptoms(validated_symptoms, 'symbi')
-     
-     print(f"Predicted Disease: {result['predicted_disease']}")
-     print(f"Confidence: {result['confidence']:.2%}")
+
+- Not a substitute for professional medical advice     
+
+- Not validated for clinical use     print(f"Predicted Disease: {result['predicted_disease']}")
+
+- Always consult healthcare professionals     print(f"Confidence: {result['confidence']:.2%}")
+
      print("\nTop 5 Predictions:")
-     for disease, prob in result['top_diseases'].items():
-         print(f"  - {disease}: {prob:.2%}")
-     ```
+
+**Limitations:**     for disease, prob in result['top_diseases'].items():
+
+- Limited to training dataset diseases         print(f"  - {disease}: {prob:.2%}")
+
+- Cannot consider patient history     ```
+
+- Works best with English descriptions
 
 #### **Method 3: Pre-trained Model Testing**
 
+## Contributing
+
 If you want to test without retraining:
 
+Contributions welcome. Feel free to submit issues or pull requests.
 
-### Want to Use Voice Input? (Optional but Cool!)
 
-This is a bit more advanced but totally doable:
 
-1. **Get API keys** (you'll need these):
+## License### Want to Use Voice Input? (Optional but Cool!)
+
+
+
+Educational purposes only.This is a bit more advanced but totally doable:
+
+
+
+## Contact1. **Get API keys** (you'll need these):
+
    - [ElevenLabs API](https://elevenlabs.io) for transcription
-   - [OpenRouter API](https://openrouter.ai) for GPT-3.5
 
-2. **Install extra stuff:**
+Repository: [github.com/BaidarSamir/MiniProjet_NLP](https://github.com/BaidarSamir/MiniProjet_NLP)   - [OpenRouter API](https://openrouter.ai) for GPT-3.5
+
+
+
+---2. **Install extra stuff:**
+
    ```bash
-   pip install sounddevice scipy elevenlabs python-dotenv openai
+
+**Academic Project** - NLP course demonstration of machine learning in healthcare.   pip install sounddevice scipy elevenlabs python-dotenv openai
+
    ```
 
 3. **Set up your keys:**
