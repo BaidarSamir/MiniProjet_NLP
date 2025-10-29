@@ -4,50 +4,30 @@ This guide shows you exactly how to run and test the Disease Prediction System.
 
 ---
 
+## 🎯 QUICKEST WAY (Recommended)
+
+### Just Use Jupyter Notebook!
+
+```bash
+# 1. Install dependencies
+pip install pandas numpy scikit-learn matplotlib seaborn tensorflow keras sentence-transformers
+
+# 2. Open and run the notebook
+jupyter notebook Disease_predictor_net.ipynb
+
+# 3. Run ALL cells from top to bottom
+# 4. At the end, change symptoms in the test cell and run it again!
+```
+
+**That's it!** No file saving, no loading, no compatibility issues! 🎉
+
+---
+
 ## 📋 Prerequisites
 
 - ✅ Python 3.8 or higher installed
 - ✅ Jupyter Notebook or JupyterLab
 - ✅ Internet connection (for downloading models first time)
-- ✅ Microphone (optional, for voice input)
-
----
-
-## 🎯 Method 1: FASTEST WAY (Recommended for Testing)
-
-### Windows Users:
-
-```bash
-# Step 1: Install everything
-setup.bat
-
-# Step 2: Train the model
-jupyter notebook Disease_predictor_net.ipynb
-# - Run ALL cells from top to bottom (takes ~10 minutes)
-# - Add this cell at the very end:
-#   symbi_model.save('disease_model.h5')
-# - Run it to save the model
-
-# Step 3: Test the system
-run_test.bat
-# - Follow the on-screen prompts
-# - Try the interactive symptom input
-```
-
-### Mac/Linux Users:
-
-```bash
-# Step 1: Install dependencies
-pip install pandas numpy scikit-learn matplotlib seaborn tensorflow keras
-pip install sounddevice scipy sentence-transformers elevenlabs python-dotenv openai
-
-# Step 2: Train the model
-jupyter notebook Disease_predictor_net.ipynb
-# (same as Windows above)
-
-# Step 3: Test the system
-python test_disease_predictor.py
-```
 
 ---
 

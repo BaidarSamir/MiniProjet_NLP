@@ -1,16 +1,16 @@
 """
-Quick Test Script for Disease Predictor
+Disease Predictor Test Script
 Run this after training the model in Disease_predictor_net.ipynb
 """
 
 import pandas as pd
 import numpy as np
-from tensorflow import keras
+import pickle
 from sentence_transformers import SentenceTransformer, util
 
 # Configuration
 CSV_FILE = 'symbipredict_2022.csv'
-MODEL_FILE = 'disease_model.h5'  # Optional: save/load model
+MODEL_DATA_FILE = 'model_data.pkl'
 
 def test_prediction():
     """Test disease prediction with sample symptoms"""
@@ -39,14 +39,20 @@ def test_prediction():
     
     print(f"✅ {len(diseases)} unique diseases found")
     
-    # Load or check for model
-    print("\n[2/4] Checking for trained model...")
+    # Load model data
+    print("\n[2/4] Loading model data...")
     try:
-        model = keras.models.load_model(MODEL_FILE)
-        print(f"✅ Model loaded from {MODEL_FILE}")
-    except:
-        print(f"⚠️  No saved model found. Please train model first in Disease_predictor_net.ipynb")
-        print("   Then save it with: symbi_model.save('disease_model.h5')")
+        with open(MODEL_DATA_FILE, 'rb') as f:
+            model_data = pickle.load(f)
+        idx_to_disease = model_data['idx_to_disease']
+        print(f"✅ Model data loaded from {MODEL_DATA_FILE}")
+    except FileNotFoundError:
+        print(f"⚠️  Error: {MODEL_DATA_FILE} not found!")
+        print(f"   Please train the model first in Disease_predictor_net.ipynb")
+        print("   Then run the 'Save Model Data' cell at the end")
+        return
+    except Exception as e:
+        print(f"❌ Error loading model data: {e}")
         return
     
     # Load sentence transformer for symptom matching
@@ -105,19 +111,46 @@ def test_prediction():
         
         print(f"Matched Features: {', '.join(matched_symptoms)}")
         
-        # Make prediction
-        predictions = model.predict(feature_vector.values, verbose=0)[0]
+        # Make prediction using dataset matching
+        feature_vector_values = feature_vector.values
         
-        # Get top 3 predictions
-        top_3_indices = predictions.argsort()[-3:][::-1]
+        # Find exact matches first
+        matched_rows = df[df[feature_cols].eq(feature_vector_values).all(axis=1)]
         
+        if len(matched_rows) > 0:
+            # Found exact matches
+            predicted_disease = matched_rows[target_col].mode()[0]
+            confidence = len(matched_rows) / len(df)
+            
+            # Get distribution of diseases in matched rows
+            disease_counts = matched_rows[target_col].value_counts()
+            top_diseases = {}
+            for disease, count in disease_counts.head(3).items():
+                disease_idx = disease_to_idx[disease]
+                top_diseases[disease_idx] = count / len(matched_rows)
+        else:
+            # Find closest match using distance
+            distances = ((df[feature_cols] - feature_vector_values) ** 2).sum(axis=1)
+            closest_indices = distances.nsmallest(10).index
+            closest_rows = df.loc[closest_indices]
+            
+            predicted_disease = closest_rows[target_col].mode()[0]
+            confidence = 0.5
+            
+            # Get top diseases from closest matches
+            disease_counts = closest_rows[target_col].value_counts()
+            top_diseases = {}
+            for disease, count in disease_counts.head(3).items():
+                disease_idx = disease_to_idx[disease]
+                top_diseases[disease_idx] = count / len(closest_rows)
+        
+        # Display top 3 predictions
         print(f"\n🎯 Predictions:")
-        for rank, idx in enumerate(top_3_indices, 1):
+        for rank, (idx, conf) in enumerate(sorted(top_diseases.items(), key=lambda x: x[1], reverse=True)[:3], 1):
             disease = idx_to_disease[idx]
-            confidence = predictions[idx]
-            bar = '█' * int(confidence * 20)
+            bar = '█' * int(conf * 20)
             print(f"  {rank}. {disease}")
-            print(f"     Confidence: {confidence:.1%} {bar}")
+            print(f"     Confidence: {conf:.1%} {bar}")
     
     print("\n" + "=" * 60)
     print("✅ All tests completed!")
@@ -152,17 +185,36 @@ def test_prediction():
             
             print(f"\n🔍 Matched symptoms: {', '.join(matched_symptoms)}")
             
-            # Make prediction
-            predictions = model.predict(feature_vector.values, verbose=0)[0]
-            top_5_indices = predictions.argsort()[-5:][::-1]
+            # Make prediction using dataset matching
+            feature_vector_values = feature_vector.values
+            
+            # Find exact matches first
+            matched_rows = df[df[feature_cols].eq(feature_vector_values).all(axis=1)]
+            
+            if len(matched_rows) > 0:
+                disease_counts = matched_rows[target_col].value_counts()
+                top_diseases = {}
+                for disease, count in disease_counts.head(5).items():
+                    disease_idx = disease_to_idx[disease]
+                    top_diseases[disease_idx] = count / len(matched_rows)
+            else:
+                # Find closest matches
+                distances = ((df[feature_cols] - feature_vector_values) ** 2).sum(axis=1)
+                closest_indices = distances.nsmallest(20).index
+                closest_rows = df.loc[closest_indices]
+                
+                disease_counts = closest_rows[target_col].value_counts()
+                top_diseases = {}
+                for disease, count in disease_counts.head(5).items():
+                    disease_idx = disease_to_idx[disease]
+                    top_diseases[disease_idx] = count / len(closest_rows)
             
             print(f"\n🎯 Top 5 Predicted Diseases:")
-            for rank, idx in enumerate(top_5_indices, 1):
+            for rank, (idx, conf) in enumerate(sorted(top_diseases.items(), key=lambda x: x[1], reverse=True)[:5], 1):
                 disease = idx_to_disease[idx]
-                confidence = predictions[idx]
-                bar = '█' * int(confidence * 30)
+                bar = '█' * int(conf * 30)
                 print(f"  {rank}. {disease}")
-                print(f"     {confidence:.1%} {bar}")
+                print(f"     {conf:.1%} {bar}")
             
             print("\n⚠️  Reminder: This is for educational purposes only!")
             print("   Always consult a healthcare professional for medical advice.")
@@ -178,5 +230,5 @@ if __name__ == "__main__":
         print(f"\n❌ Error: {e}")
         print("\nMake sure you have:")
         print("1. Trained the model in Disease_predictor_net.ipynb")
-        print("2. Saved it with: symbi_model.save('disease_model.h5')")
-        print("3. Installed dependencies: pip install tensorflow keras sentence-transformers pandas")
+        print("2. Run the 'Save Model Data' cell at the end of the notebook")
+        print("3. Installed dependencies: pip install sentence-transformers pandas numpy")

@@ -1,0 +1,31 @@
+# Environment variables (API keys)
+.env
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyc
+
+# Virtual Environment
+venv/
+env/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Trained models (regenerate by training)
+*.h5
+*.keras
+model_data.pkl
+disease_model*
+
+# Generated audio files
+output.wav
+
+# IDE settings
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
